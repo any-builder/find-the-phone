@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>找手机 - 使用帮助</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #007aff, #5856d6);
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        header img.logo {
+            width: 64px;
+            height: 64px;
+            border-radius: 12px;
+        }
+
+        header .header-text {
+            text-align: left;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .step {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: #007aff;
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 1rem;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .step-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .step-body {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+        }
+
+        .step-body.vertical {
+            flex-direction: column;
+        }
+
+        .step-description {
+            flex: 1;
+            color: #666;
+        }
+
+        .step-description ul,
+        .step-description ol {
+            margin: 12px 0 0 20px;
+            color: #666;
+        }
+
+        .step-description li {
+            margin-bottom: 6px;
+        }
+
+        .screenshot {
+            flex-shrink: 0;
+            width: 180px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f9f9f9;
+        }
+
+        .screenshot img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .screenshot.vertical {
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .screenshot.vertical img {
+            width: 100%;
+            height: auto;
+        }
+
+        .tip {
+            background: #fff9e6;
+            border-left: 4px solid #ffc107;
+            padding: 12px 16px;
+            margin-top: 16px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95rem;
+        }
+
+        .tip strong {
+            color: #b38600;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #007aff;
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            header .header-text {
+                text-align: center;
+            }
+
+            .container {
+                padding: 12px;
+            }
+
+            header {
+                padding: 30px 16px;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            .step {
+                padding: 16px;
+            }
+
+            .step-number {
+                width: 28px;
+                height: 28px;
+                font-size: 0.9rem;
+            }
+
+            .step-title {
+                font-size: 1.1rem;
+            }
+
+            .step-body {
+                flex-direction: column-reverse;
+                gap: 16px;
+            }
+
+            .screenshot {
+                width: 100%;
+                max-width: 280px;
+            }
+
+            .screenshot.vertical {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="logo.png" alt="找手机 Logo" class="logo">
+        <div class="header-text">
+            <h1>找手机</h1>
+            <p>让天猫精灵帮你找手机</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Step 1 -->
+        <div class="step">
+            <div class="step-header">
+                <span class="step-number">1</span>
+                <h2 class="step-title">下载并安装应用</h2>
+            </div>
+            <div class="step-body">
+                <div class="step-description">
+                    <p>在华为应用市场搜索"找手机"，或扫描下面的二维码下载安装应用。</p>
+                </div>
+                <div class="screenshot">
+                    <img src="step-1.jpg" alt="应用商店截图">
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step">
+            <div class="step-header">
+                <span class="step-number">2</span>
+                <h2 class="step-title">打开应用</h2>
+            </div>
+            <div class="step-body">
+                <div class="step-description">
+                    <p>首次打开应用，应用会请求通知授权和关闭电池管理授权。应用启动后会自动进行激活，在界面上可以看到"已激活"状态和激活码。</p>
+                    <div class="tip">
+                        <strong>提示：</strong>关闭电池管理避免应用被系统杀掉，确保能及时接收找手机指令。
+                    </div>
+                </div>
+                <div class="screenshot">
+                    <img src="step-2.jpg" alt="应用界面截图">
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step">
+            <div class="step-header">
+                <span class="step-number">3</span>
+                <h2 class="step-title">天猫精灵设置-1</h2>
+            </div>
+            <div class="step-body vertical">
+                <div class="step-description">
+                    <p>登录<a href="https://iap.aligenie.com/home" target="_blank">天猫精灵技能应用平台</a>
+                        ，创建一个语音技能，技能调用词填"我手机呢"，后端服务资源的部署方式选择"自建Web Service"。
+                    </p>
+                </div>
+                <div class="screenshot vertical">
+                    <img src="step-3.png" alt="天猫精灵技能创建截图">
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step">
+            <div class="step-header">
+                <span class="step-number">4</span>
+                <h2 class="step-title">天猫精灵设置-2</h2>
+            </div>
+            <div class="step-body vertical">
+                <div class="step-description">
+                    <p>在"语音交互模型"中创建意图，填写意图名称和标识，勾选"设为默认意图"。完成后点击右下角的"提交"。</p>
+                </div>
+                <div class="screenshot vertical">
+                    <img src="step-4.png" alt="天猫精灵意图创建截图">
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="step">
+            <div class="step-header">
+                <span class="step-number">5</span>
+                <h2 class="step-title">天猫精灵设置-3</h2>
+            </div>
+            <div class="step-body vertical">
+                <div class="step-description">
+                    <p>在"后端服务"中，点击"编辑部署"。服务器部署地址填写为 <code>https://tianmao-webhook-wmbegalpji.cn-hangzhou.fcapp.run</code></p>
+                    <ol>
+                        <li>点击服务器部署地址右边的"下载认证文件"，将文件内容复制</li>
+                        <li>点击"请求Header"右边的"添加参数"，添加参数名为"aligenie-auth"，参数值为下载的认证文件的内容</li>
+                        <li>点击"请求Header"右边的"添加参数"，添加参数名为"activate-code"，参数值为App中的激活码（8位数字）</li>
+                    </ol>
+                    <p>完成后点击下方的"保存"</p>
+                </div>
+                <div class="screenshot vertical">
+                    <img src="step-5.png" alt="天猫精灵后端服务截图">
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="step">
+            <div class="step-header">
+                <span class="step-number">6</span>
+                <h2 class="step-title">天猫精灵设置-4</h2>
+            </div>
+            <div class="step-body vertical">
+                <div class="step-description">
+                    <p>在"测试"中点击左侧的"真机测试"，开启真机测试开关。在下方选择"直接使用账号下设备"。</p>
+                    <div class="tip">
+                        <strong>注意：</strong>天猫精灵关联的账号须和登录天猫精灵技能应用平台的账号一致。
+                    </div>
+                </div>
+                <div class="screenshot vertical">
+                    <img src="step-6.png" alt="天猫精灵测试截图">
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 7 -->
+        <div class="step">
+            <div class="step-header">
+                <span class="step-number">7</span>
+                <h2 class="step-title">测试找手机</h2>
+            </div>
+            <div class="step-body">
+                <div class="step-description">
+                    <p>唤醒天猫精灵，对它说"我手机呢"，天猫精灵会回复"即将响铃"，手机将播放响亮的报警音并持续振动。</p>
+                    <div class="tip">
+                        <strong>注意：</strong>报警音会在 15 秒后自动停止。如需提前停止，可再次打开手机通知栏点击"停止响铃"。
+                    </div>
+                </div>
+                <div class="screenshot">
+                    <img src="step-7.jpg" alt="报警界面截图">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>如有问题，请 <a href="#">联系我们</a></p>
+        <p style="margin-top: 8px;">找手机 v1.0</p>
+    </footer>
+</body>
+</html>

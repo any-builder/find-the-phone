@@ -1,0 +1,37 @@
+edition: 3.0.0
+name: hello-world-app
+access: "default"
+
+vars:
+  region: "cn-hangzhou"
+
+resources:
+  hello_world:
+    component: fc3 
+    props:
+      region: ${vars.region}
+      functionName: "tianmao-webhook"
+      description: "hello world by serverless devs"
+      runtime: "python3.9"
+      code: ./
+      role: 'acs:ram::1237050315505682:role/admin-to-fc'
+      handler: index.handler
+      memorySize: 128
+      timeout: 10
+      concurrencyConfig:
+        reservedConcurrency: 1
+      environmentVariables:
+        HMS_APP_ID: ${env('HMS_APP_ID')}
+        HMS_CLIENT_ID: ${env('HMS_CLIENT_ID')}
+        HMS_CLIENT_SECRET: ${env('HMS_CLIENT_SECRET')}
+      triggers:
+        - triggerName: httpTrigger
+          triggerType: http
+          description: "xxxx"
+          qualifier: LATEST
+          triggerConfig:
+            authType: anonymous
+            disableURLInternet: false # 是否禁用公网访问 URL
+            methods:
+              - GET
+              - POST
