@@ -47,5 +47,7 @@
     <string name="hms_push_status">HMS 推送</string>
     <string name="activation_status">激活状态:</string>
     <string name="not_activated">未激活</string>
-    <string name="activation_code_format">激活码: %1$s</string>
+    <string name="tmall_genie_verify_code">天猫精灵认证码</string>
+    <string name="tmall_genie_address">天猫精灵地址:</string>
+    <string name="link_copied">链接已复制</string>
 </resources>

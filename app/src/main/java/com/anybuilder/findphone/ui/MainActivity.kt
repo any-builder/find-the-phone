@@ -18,6 +18,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,6 +33,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -51,6 +54,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -67,6 +71,7 @@ import com.anybuilder.findphone.data.RingtoneInfo
 import com.anybuilder.findphone.service.AudioPlayer
 import com.anybuilder.findphone.service.MonitoringService
 import com.anybuilder.findphone.ui.theme.MonitorAlertTheme
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -124,7 +129,8 @@ class MainActivity : ComponentActivity() {
                     onConfigChange = viewModel::updateConfig,
                     onPreviewRingtone = { uri, volume ->
                         audioPlayer.previewRingtone(uri, volume)
-                    }
+                    },
+                    onActivate = viewModel::activate
                 )
             }
         }
@@ -264,7 +270,8 @@ fun MainScreen(
     activationError: String?,
     deviceId: String?,
     onConfigChange: (MonitoringConfig) -> Unit,
-    onPreviewRingtone: (String, Float) -> Unit
+    onPreviewRingtone: (String, Float) -> Unit,
+    onActivate: (String) -> Unit
 ) {
     var volume by remember { mutableStateOf(config.volumeLevel) }
     var vibrateEnabled by remember { mutableStateOf(config.vibrateEnabled) }
@@ -276,6 +283,8 @@ fun MainScreen(
                 ?: RingtoneInfo("Default Alarm", "")
         )
     }
+    var verifyCode by remember { mutableStateOf("") }
+    var copyButtonText by remember { mutableStateOf("复制") }
 
     Column(
         modifier = Modifier
@@ -310,55 +319,129 @@ fun MainScreen(
                 )
                 // Activation Status (under HMS Push)
                 Spacer(modifier = Modifier.height(8.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Text(
-                        text = stringResource(R.string.activation_status),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = statusColor
-                    )
-                    if (isActivating) {
+                val context = LocalContext.current
+                if (isActivating) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.activation_status),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = statusColor
+                        )
                         CircularProgressIndicator(
                             modifier = Modifier.height(16.dp).width(16.dp),
                             strokeWidth = 2.dp,
                             color = statusColor
                         )
-                    } else {
+                    }
+                } else if (isActivated) {
+                    // Show Tmall Genie address link when activated
+                    deviceId?.let { id ->
+                        val fpUrl = "https://fp.any-builder.com/?k=$id"
+                        Column {
+                            Text(
+                                text = stringResource(R.string.tmall_genie_address),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = statusColor
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = fpUrl,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier.weight(1f).clickable {
+                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://any-builder.com/find-the-phone/"))
+                                        context.startActivity(intent)
+                                    }
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(
+                                    text = copyButtonText,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = androidx.compose.ui.graphics.Color.White,
+                                    modifier = Modifier
+                                        .background(
+                                            color = androidx.compose.ui.graphics.Color(0xFF1976D2),
+                                            shape = MaterialTheme.shapes.small
+                                        )
+                                        .border(
+                                            width = 1.dp,
+                                            color = androidx.compose.ui.graphics.Color(0xFF1976D2),
+                                            shape = MaterialTheme.shapes.small
+                                        )
+                                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                                        .clickable {
+                                            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                                            val clip = android.content.ClipData.newPlainText("URL", fpUrl)
+                                            clipboard.setPrimaryClip(clip)
+                                            copyButtonText = "已复制"
+                                        }
+                                )
+
+                                LaunchedEffect(copyButtonText) {
+                                    if (copyButtonText == "已复制") {
+                                        kotlinx.coroutines.delay(1500)
+                                        copyButtonText = "复制"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
                         Text(
-                            text = if (isActivated)
-                                stringResource(R.string.activated)
-                            else
-                                stringResource(R.string.not_activated),
+                            text = stringResource(R.string.activation_status),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = statusColor
+                        )
+                        Text(
+                            text = stringResource(R.string.not_activated),
                             style = MaterialTheme.typography.bodyMedium,
                             color = statusColor
                         )
                     }
                 }
-                // Activation code display
-                deviceId?.let { id ->
-                    val context = LocalContext.current
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Row(
+                // Manual activation section
+                if (!isActivated) {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    OutlinedTextField(
+                        value = verifyCode,
+                        onValueChange = { verifyCode = it },
+                        label = { Text(stringResource(R.string.tmall_genie_verify_code)) },
+                        placeholder = { Text(stringResource(R.string.enter_verify_code_hint)) },
                         modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
+                        singleLine = true,
+                        enabled = !isActivating
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Button(
+                        onClick = {
+                            onActivate(verifyCode)
+                            verifyCode = ""
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        enabled = !isActivating && pushToken != null
                     ) {
-                        Text(
-                            text = stringResource(R.string.activation_code_format, id),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = statusColor
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = "如何使用？",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.clickable {
-                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://any-builder.com/find-the-phone/"))
-                                context.startActivity(intent)
-                            }
-                        )
+                        if (isActivating) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.height(16.dp).width(16.dp),
+                                strokeWidth = 2.dp,
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                        } else {
+                            Text(stringResource(R.string.activation_button))
+                        }
                     }
                 }
                 if (activationError != null) {

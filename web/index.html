@@ -251,9 +251,9 @@
             </div>
             <div class="step-body">
                 <div class="step-description">
-                    <p>首次打开应用，应用会请求通知授权和关闭电池管理授权。应用启动后会自动进行激活，在界面上可以看到"已激活"状态和激活码。</p>
+                    <p>首次打开应用，应用会请求通知授权和关闭电池优化。应用首次启动后会要求输入天猫精灵认证码进行激活。在下面的步骤5会包含如何激活。</p>
                     <div class="tip">
-                        <strong>提示：</strong>关闭电池管理避免应用被系统杀掉，确保能及时接收找手机指令。
+                        <strong>提示：</strong>关闭电池优化能避免应用被系统杀掉，确保能及时接收找手机指令。
                     </div>
                 </div>
                 <div class="screenshot">
@@ -304,11 +304,12 @@
             </div>
             <div class="step-body vertical">
                 <div class="step-description">
-                    <p>在"后端服务"中，点击"编辑部署"。服务器部署地址填写为 <code>https://tianmao-webhook-wmbegalpji.cn-hangzhou.fcapp.run</code></p>
+                    <p>在"后端服务"中，点击"编辑部署"。</p>
                     <ol>
                         <li>点击服务器部署地址右边的"下载认证文件"，将文件内容复制</li>
-                        <li>点击"请求Header"右边的"添加参数"，添加参数名为"aligenie-auth"，参数值为下载的认证文件的内容</li>
-                        <li>点击"请求Header"右边的"添加参数"，添加参数名为"activate-code"，参数值为App中的激活码（8位数字）</li>
+                        <li>将复制的内容粘贴到App界面的"天猫精灵认证码"输入框中，点击"激活"</li>
+                        <li>激活成功后，点击App界面上天猫精灵地址右边的"复制"按钮复制链接</li>
+                        <li>服务器部署地址填写为上一步复制的地址</li>
                     </ol>
                     <p>完成后点击下方的"保存"</p>
                 </div>

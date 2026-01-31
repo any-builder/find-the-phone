@@ -4,8 +4,8 @@ import os
 import base64
 
 OBJECT_PREFIX = "wimp_activate_codes/"
-OSS_ENDPOINT = "oss-cn-hangzhou-internal.aliyuncs.com"
-OSS_BUCKET_NAME = "rockuw-hz"
+OSS_ENDPOINT = "oss-{}-internal.aliyuncs.com"
+OSS_BUCKET_NAME = "rockuw-sg"
 
 def handler(event, context):
     try:
@@ -22,12 +22,16 @@ def handler(event, context):
 
     code = event.get("code")
     push_token = event.get("push_token")
+    verify_code = event.get("verify_code")
 
     if not code:
         return {"statusCode": 400, "body": json.dumps({"error": "Missing code"})}
 
     if not push_token:
         return {"statusCode": 400, "body": json.dumps({"error": "Missing push_token"})}
+
+    if not verify_code:
+        return {"statusCode": 400, "body": json.dumps({"error": "Missing verify_code"})}
 
     if not context or not context.credentials:
         return {"statusCode": 500, "body": json.dumps({"error": "Missing credentials in context"})}
@@ -39,7 +43,7 @@ def handler(event, context):
     if not security_token:
         return {"statusCode": 500, "body": json.dumps({"error": "Missing security token in credentials"})}
 
-    oss_endpoint = os.environ.get("OSS_ENDPOINT", OSS_ENDPOINT)
+    oss_endpoint = os.environ.get("OSS_ENDPOINT", OSS_ENDPOINT).format(context.region)
     bucket_name = os.environ.get("OSS_BUCKET_NAME", OSS_BUCKET_NAME)
 
     if not all([oss_endpoint, bucket_name]):

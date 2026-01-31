@@ -75,4 +75,4 @@ Place `agconnect-services.json` from AppGallery Connect in `app/` directory. Pus
 
 Aliyun FunctionCompute Python functions in `cloud_functions/`:
 - `hms_push_sender/` - Sends push notifications
-- `oss_event_store/` - Activation endpoint: `https://oss-event-store-gxcbxmasbr.cn-hangzhou.fcapp.run`
+- `oss_event_store/` - Activation endpoint: `https://device-activate-mcvfbtcuhc.ap-southeast-1.fcapp.run`

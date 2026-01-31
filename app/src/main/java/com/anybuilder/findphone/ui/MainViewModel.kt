@@ -51,7 +51,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     companion object {
         private const val KEY_ACTIVATED = "is_activated"
-        private const val ACTIVATION_URL = "https://oss-event-store-gxcbxmasbr.cn-hangzhou.fcapp.run"
+        private const val ACTIVATION_URL = "https://device-activate-mcvfbtcuhc.ap-southeast-1.fcapp.run"
     }
 
     private val prefsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
@@ -60,10 +60,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             val newToken = prefs.getString("hms_push_token", null)
             Log.i("MainViewModel", "pushToken changed via listener: ${newToken?.let { "${it.substring(0, minOf(20, it.length))}..." } ?: "null"}")
             _pushToken.value = newToken
-            // Auto-activate when push token is received
-            if (!newToken.isNullOrEmpty() && _deviceId.value != null && !_isActivated.value) {
-                autoActivate()
-            }
+            // No longer auto-activate - user must manually activate
         } else if (key == KEY_ACTIVATED) {
             val newActivated = prefs.getBoolean(KEY_ACTIVATED, false)
             Log.i("MainViewModel", "isActivated changed via listener: $newActivated")
@@ -88,10 +85,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
         Log.i("MainViewModel", "Device ID (hashed): ${_deviceId.value}")
         prefs.registerOnSharedPreferenceChangeListener(prefsListener)
-        // Try auto-activation if we have both device ID and push token
-        if (!_pushToken.value.isNullOrEmpty() && _deviceId.value != null) {
-            autoActivate()
-        }
+        // Manual activation only - user must click activate button
     }
 
     private fun loadActivationStatus() {
@@ -133,28 +127,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _state.value = _state.value.copy(alertTriggered = false)
     }
 
-    fun activate(activateCode: String) {
-        // Use provided code or fall back to device ID
-        val code = activateCode.ifEmpty { _deviceId.value }
-        if (code.isNullOrEmpty()) {
+    fun activate(verifyCode: String) {
+        // Manual activation with verify code from Tmall Genie
+        val hashedCode = _deviceId.value
+        if (hashedCode.isNullOrEmpty()) {
             _activationError.value = "Device ID not available."
             return
         }
-        performActivation(code)
-    }
-
-    private fun autoActivate() {
-        val hashedCode = _deviceId.value
-        val token = _pushToken.value
-        if (hashedCode.isNullOrEmpty() || token.isNullOrEmpty()) {
-            Log.i("MainViewModel", "autoActivate: missing hashedCode=$hashedCode or token=${token?.let { "..." }}")
+        if (verifyCode.isEmpty()) {
+            _activationError.value = "Please enter the Tmall Genie verification code."
             return
         }
-        Log.i("MainViewModel", "autoActivate: using hashed code: ${hashedCode.take(8)}...")
-        performActivation(hashedCode)
+        performActivation(hashedCode, verifyCode)
     }
 
-    private fun performActivation(code: String) {
+    private fun performActivation(code: String, verifyCode: String) {
         val token = _pushToken.value
         if (token.isNullOrEmpty()) {
             _activationError.value = "Push token not available. Please wait for registration."
@@ -167,7 +154,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
             try {
                 val success = withContext(Dispatchers.IO) {
-                    performActivationRequest(code, token)
+                    performActivationRequest(code, token, verifyCode)
                 }
 
                 if (success) {
@@ -190,7 +177,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private fun performActivationRequest(code: String, token: String): Boolean {
+    private fun performActivationRequest(code: String, token: String, verifyCode: String): Boolean {
         return try {
             val url = URL(ACTIVATION_URL)
             val connection = url.openConnection() as HttpURLConnection
@@ -198,7 +185,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             connection.setRequestProperty("Content-Type", "application/json")
             connection.doOutput = true
 
-            val jsonBody = """{"code":"$code","push_token":"$token"}"""
+            val jsonBody = """{"code":"$code","push_token":"$token","verify_code":"$verifyCode"}"""
 
             connection.outputStream.use { outputStream ->
                 OutputStreamWriter(outputStream).use { writer ->
