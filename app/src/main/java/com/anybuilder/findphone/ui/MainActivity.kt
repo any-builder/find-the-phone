@@ -339,7 +339,7 @@ fun MainScreen(
                 } else if (isActivated) {
                     // Show Tmall Genie address link when activated
                     deviceId?.let { id ->
-                        val fpUrl = "https://fp.any-builder.com/?k=$id"
+                        val fpUrl = "https://tianmao-webhook-wmbegalpji.cn-hangzhou.fcapp.run/?k=$id"
                         Column {
                             Text(
                                 text = stringResource(R.string.tmall_genie_address),

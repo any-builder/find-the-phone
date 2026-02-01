@@ -5,7 +5,7 @@ import base64
 
 OBJECT_PREFIX = "wimp_activate_codes/"
 OSS_ENDPOINT = "oss-{}-internal.aliyuncs.com"
-OSS_BUCKET_NAME = "rockuw-sg"
+OSS_BUCKET_NAME = "rockuw-hz"
 
 def handler(event, context):
     try:

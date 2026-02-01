@@ -8,7 +8,7 @@ import requests
 OBJECT_PREFIX = "wimp_activate_codes/"
 LOG_PREFIX = "logs/"
 OSS_ENDPOINT = "oss-{}-internal.aliyuncs.com"
-OSS_BUCKET_NAME = "rockuw-sg"
+OSS_BUCKET_NAME = "rockuw-hz"
 
 # To enable the initializer feature (https://help.aliyun.com/document_detail/2513452.html)
 # please implement the initializer function as below：

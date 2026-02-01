@@ -51,7 +51,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     companion object {
         private const val KEY_ACTIVATED = "is_activated"
-        private const val ACTIVATION_URL = "https://device-activate-mcvfbtcuhc.ap-southeast-1.fcapp.run"
+        private const val ACTIVATION_URL = "https://device-activate-mcvfbtcuhc.cn-hangzhou.fcapp.run"
     }
 
     private val prefsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->

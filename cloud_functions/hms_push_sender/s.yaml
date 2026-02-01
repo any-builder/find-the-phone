@@ -3,7 +3,7 @@ name: hello-world-app
 access: "default"
 
 vars:
-  region: "ap-southeast-1"
+  region: "cn-hangzhou"
 
 resources:
   hello_world:
